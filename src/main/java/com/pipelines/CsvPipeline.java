@@ -31,6 +31,11 @@ public class CsvPipeline {
 		@Required
 		ValueProvider<String> getInputFilePattern();
 		void setInputFilePattern(ValueProvider<String> value);
+		
+		@Description("BigQuery table (e.g. project:my_dataset.my_table)")
+		@Required
+		ValueProvider<String> getBigQueryTable();
+		void setBigQueryTable(ValueProvider<String> value);
 	}
 
 	public static void main(String[] args) {
@@ -51,7 +56,7 @@ public class CsvPipeline {
 	public static PipelineResult run(Options options) {
 		// Create the pipeline.
 		Pipeline pipeline = Pipeline.create(options);
-		String bqTable = "";  //format = project:my_set.my_table
+		String bqTable = options.getBigQueryTable().toString();  //format = project:my_set.my_table
 		
 		/*
 		 * Steps:
