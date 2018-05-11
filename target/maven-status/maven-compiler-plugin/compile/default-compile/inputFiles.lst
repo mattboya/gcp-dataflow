@@ -1,0 +1,11 @@
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\matt\Member.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\file\conversion\CsvToJson.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\pipelines\StarterPipeline.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\templates\TextToCsv.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\pipelines\CsvPipeline.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\templates\TextToPubsub.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\pipelines\JsonPipeline.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\templates\TextToJson.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\matt\HealthLog.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\file\conversion\JsonToCsv.java
+C:\Code\oxygen-workspace\gcp.dataflow\src\main\java\com\pipelines\XmlPipeline.java
