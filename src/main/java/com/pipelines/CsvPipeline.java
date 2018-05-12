@@ -1,5 +1,8 @@
 package com.pipelines;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.io.TextIO;
@@ -17,7 +20,9 @@ import org.apache.beam.sdk.values.PCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
+import com.google.api.services.bigquery.model.TableSchema;
 
 public class CsvPipeline {
 	private static final Logger LOG = LoggerFactory.getLogger(CsvPipeline.class);
@@ -71,7 +76,7 @@ public class CsvPipeline {
 		tableRows
 		.apply(BigQueryIO.<TableRow> writeTableRows()
 			.to(bqTable)
-			// .withSchema(getSchema())
+			.withSchema(getTableSchema())
 			.withWriteDisposition(WriteDisposition.WRITE_APPEND)
 			.withCreateDisposition(CreateDisposition.CREATE_NEVER));
 		
@@ -102,5 +107,22 @@ public class CsvPipeline {
 			pc.output(tableRow);
 		}
 	}
+	
+	private static TableSchema getTableSchema() {
+        List<TableFieldSchema> fields = new ArrayList<>();
+        fields.add(new TableFieldSchema().setName("Member_ID").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("First_Name").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("Last_Name").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("Gender").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("Age").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("Height").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("Weight").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("Hours_Sleep").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("Calories_Consumed").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("Exercise_Calories_Burned").setType("INTEGER"));
+        fields.add(new TableFieldSchema().setName("Date").setType("STRING"));
+
+        return new TableSchema().setFields(fields);
+    }
 
 }
