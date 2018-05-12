@@ -94,8 +94,8 @@ public class CsvPipeline {
 			String[] elements = pc.element().split(",");
 			TableRow tableRow = new TableRow();
 			
-			LOG.info(elements.toString());
-			LOG.info(tableRow.toString());
+			LOG.info("<><> Elements: " + elements.toString());
+			LOG.info("<><> TableRow: " + tableRow.toString());
 			
 			tableRow.set("Member_ID", elements[0]);
 			tableRow.set("First_Name", elements[1]);
@@ -114,7 +114,9 @@ public class CsvPipeline {
 	}
 	
 	private static TableSchema getTableSchema() {
+		LOG.info("<><> getTableSchema()");
         List<TableFieldSchema> fields = new ArrayList<>();
+        
         fields.add(new TableFieldSchema().setName("Member_ID").setType("INTEGER"));
         fields.add(new TableFieldSchema().setName("First_Name").setType("STRING"));
         fields.add(new TableFieldSchema().setName("Last_Name").setType("STRING"));
@@ -126,8 +128,12 @@ public class CsvPipeline {
         fields.add(new TableFieldSchema().setName("Calories_Consumed").setType("INTEGER"));
         fields.add(new TableFieldSchema().setName("Exercise_Calories_Burned").setType("INTEGER"));
         fields.add(new TableFieldSchema().setName("Date").setType("STRING"));
+        
+        TableSchema ts = new TableSchema();
+        ts.setFields(fields);
+        LOG.info("<><> TableSchema to return: " + ts.toString());
 
-        return new TableSchema().setFields(fields);
+        return ts;
     }
 
 }
