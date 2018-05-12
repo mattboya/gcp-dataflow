@@ -87,6 +87,7 @@ public class CsvPipeline {
 		return pipeline.run();
 	}
 
+	@SuppressWarnings("serial")
 	public static class CsvLineToBQRow extends DoFn<String, TableRow> {
 		@ProcessElement
 		public void processElement(ProcessContext pc) {
