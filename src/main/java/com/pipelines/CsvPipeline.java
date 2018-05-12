@@ -44,7 +44,7 @@ public class CsvPipeline {
 	}
 
 	public static void main(String[] args) {
-		LOG.info("CSV pipeline");
+		LOG.info("<><> CSV pipeline");
 		// Parse the user options passed from the command-line
 		Options options = PipelineOptionsFactory.fromArgs(args).withValidation().as(Options.class);
 
@@ -58,6 +58,7 @@ public class CsvPipeline {
 	 *            The execution parameters.
 	 */
 	public static PipelineResult run(Options options) {
+		LOG.info("<><> run(options)");
 		// Create the pipeline.
 		Pipeline pipeline = Pipeline.create(options);
 		String bqTable = options.getBigQueryTable().toString();  //format = project:my_set.my_table
@@ -69,16 +70,19 @@ public class CsvPipeline {
 		 * 3. Write BQ rows to BQ table
 		 */
 		PCollection<String> csvRows = pipeline.apply(TextIO.read().from(options.getInputFilePattern()));
-		LOG.info(csvRows.toString());
+		LOG.info("<><> csvRows.toString(): " + csvRows.toString());
 		PCollection<TableRow> tableRows = csvRows.apply(ParDo.of(new CsvLineToBQRow()));
-		LOG.info(tableRows.toString());
+		LOG.info("<><> tableRows.toString(): " + tableRows.toString());
 		
 		tableRows
-		.apply(BigQueryIO.<TableRow> writeTableRows()
+		.apply(
+//				BigQueryIO.<TableRow> writeTableRows()
+			BigQueryIO.writeTableRows()
 			.to(bqTable)
 			.withSchema(getTableSchema())
 			.withWriteDisposition(WriteDisposition.WRITE_APPEND)
-			.withCreateDisposition(CreateDisposition.CREATE_NEVER));
+			.withCreateDisposition(CreateDisposition.CREATE_NEVER)
+		);
 		
 		return pipeline.run();
 	}
