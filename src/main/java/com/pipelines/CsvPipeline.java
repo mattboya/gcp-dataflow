@@ -39,8 +39,7 @@ public class CsvPipeline {
 	}
 
 	public static void main(String[] args) {
-		
-		System.out.println("CSV pipeline");
+		LOG.info("CSV pipeline");
 		// Parse the user options passed from the command-line
 		Options options = PipelineOptionsFactory.fromArgs(args).withValidation().as(Options.class);
 
@@ -65,7 +64,9 @@ public class CsvPipeline {
 		 * 3. Write BQ rows to BQ table
 		 */
 		PCollection<String> csvRows = pipeline.apply(TextIO.read().from(options.getInputFilePattern()));
+		LOG.info(csvRows.toString());
 		PCollection<TableRow> tableRows = csvRows.apply(ParDo.of(new CsvLineToBQRow()));
+		LOG.info(tableRows.toString());
 		
 		tableRows
 		.apply(BigQueryIO.<TableRow> writeTableRows()
@@ -82,6 +83,9 @@ public class CsvPipeline {
 		public void processElement(ProcessContext pc) {
 			String[] elements = pc.element().split(",");
 			TableRow tableRow = new TableRow();
+			
+			LOG.info(elements.toString());
+			LOG.info(tableRow.toString());
 			
 			tableRow.set("Member_ID", elements[0]);
 			tableRow.set("First_Name", elements[1]);
