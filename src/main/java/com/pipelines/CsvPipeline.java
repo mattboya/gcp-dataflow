@@ -72,20 +72,27 @@ public class CsvPipeline {
 		 * 2. Convert CSV lines to BQ rows
 		 * 3. Write BQ rows to BQ table
 		 */
-		PCollection<String> csvRows = pipeline.apply(TextIO.read().from(options.getInputFilePattern()));
-		LOG.info("<><> csvRows.toString(): " + csvRows.toString());
-		PCollection<TableRow> tableRows = csvRows.apply(ParDo.of(new CsvLineToBQRow()));
-		LOG.info("<><> tableRows.toString(): " + tableRows.toString());
+//		PCollection<String> csvRows = pipeline.apply(TextIO.read().from(options.getInputFilePattern()));
+//		PCollection<TableRow> tableRows = csvRows.apply(ParDo.of(new CsvLineToBQRow()));
+//		
+//		tableRows
+//		.apply(
+//			BigQueryIO.writeTableRows()
+//			.to(bqTable)
+//			.withSchema(getTableSchema())
+//			.withWriteDisposition(WriteDisposition.WRITE_APPEND)
+//			.withCreateDisposition(CreateDisposition.CREATE_NEVER)
+//		);
 		
-		tableRows
-		.apply(
-//				BigQueryIO.<TableRow> writeTableRows()
-			BigQueryIO.writeTableRows()
-			.to(bqTable)
-			.withSchema(getTableSchema())
-			.withWriteDisposition(WriteDisposition.WRITE_APPEND)
-			.withCreateDisposition(CreateDisposition.CREATE_NEVER)
-		);
+		pipeline
+			.apply(TextIO.read()
+					.from(options.getInputFilePattern()))
+			.apply(ParDo.of(new CsvLineToBQRow()))
+			.apply(BigQueryIO.writeTableRows()
+				.to(bqTable)
+				.withSchema(getTableSchema())
+				.withWriteDisposition(WriteDisposition.WRITE_APPEND)
+				.withCreateDisposition(CreateDisposition.CREATE_NEVER));
 		
 		return pipeline.run();
 	}
