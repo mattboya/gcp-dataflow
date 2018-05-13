@@ -35,12 +35,12 @@ public class CsvPipeline {
 		@Description("The file pattern to read records from (e.g. gs://bucket/file-*.csv)")
 		@Required
 		ValueProvider<String> getInputFilePattern();
-		void setInputFilePattern(ValueProvider<String> value);
+		void setInputFilePattern(ValueProvider<String> inputFilePattern);
 		
 		@Description("BigQuery table (e.g. project:my_dataset.my_table)")
 		@Required
 		ValueProvider<String> getBigQueryTable();
-		void setBigQueryTable(ValueProvider<String> value);
+		void setBigQueryTable(ValueProvider<String> bigQueryTable);
 	}
 
 	public static void main(String[] args) {
@@ -59,6 +59,9 @@ public class CsvPipeline {
 	 */
 	public static PipelineResult run(Options options) {
 		LOG.info("<><> run(options)");
+		LOG.info("<><> Input file pattern: " + options.getInputFilePattern().get());
+		LOG.info("<><> BigQuery table: " + options.getBigQueryTable().get());
+		
 		// Create the pipeline.
 		Pipeline pipeline = Pipeline.create(options);
 		String bqTable = options.getBigQueryTable().toString();  //format = project:my_set.my_table
@@ -89,8 +92,11 @@ public class CsvPipeline {
 
 	@SuppressWarnings("serial")
 	public static class CsvLineToBQRow extends DoFn<String, TableRow> {
+		
 		@ProcessElement
 		public void processElement(ProcessContext pc) {
+			LOG.info("<><> CsvLineToBQRow.processElement()");
+			
 			String[] elements = pc.element().split(",");
 			TableRow tableRow = new TableRow();
 			
